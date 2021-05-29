@@ -1,6 +1,8 @@
 package com.ccarlos.test;
 
 
+import com.ccarlos.dao.IUserDao;
+import com.ccarlos.dao.impl.IUserDaoImpl;
 import com.ccarlos.pojo.User;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -24,7 +26,7 @@ public class MybatisTest {
         SqlSession sqlSession = sqlSessionFactory.openSession();// 默认开启一个事务，但是该事务不会自动提交
                                                                 //在进行增删改操作时，要手动提交事务
         //4.sqlSession调用方法：查询所有selectList  查询单个：selectOne 添加：insert  修改：update 删除：delete
-        List<User> users = sqlSession.selectList("userMapper.findAll");
+        List<User> users = sqlSession.selectList("com.ccarlos.dao.IUserDao.findAll");
         for (User user : users) {
             System.out.println(user);
         }
@@ -42,7 +44,7 @@ public class MybatisTest {
         User user = new User();
         user.setId(6);
         user.setUsername("tom");
-        int insert = sqlSession.insert("userMapper.add", user);
+        int insert = sqlSession.insert("com.ccarlos.dao.IUserDao.add", user);
         System.out.println(insert);
         // 提交事务
         sqlSession.commit();
@@ -60,7 +62,7 @@ public class MybatisTest {
         user.setId(7);
         user.setUsername("lucy");
         user.setPassword("123456");
-        int update = sqlSession.update("userMapper.update", user);
+        int update = sqlSession.update("com.ccarlos.dao.IUserDao.update", user);
         System.out.println(update);
         sqlSession.commit();
         sqlSession.close();
@@ -73,9 +75,31 @@ public class MybatisTest {
         SqlSession sqlSession = sqlSessionFactory.openSession();
 
 
-        sqlSession.delete("userMapper.delete",6);
+        sqlSession.delete("com.ccarlos.dao.IUserDao.delete",6);
         sqlSession.commit();
 
+        sqlSession.close();
+    }
+
+    @Test
+    public void testTraditionDao() throws IOException {
+        IUserDao userDao = new IUserDaoImpl();
+        List<User> all = userDao.findAll();
+        System.out.println(all);
+    }
+
+    @Test
+    public void testProxyDao() throws IOException {
+        InputStream resourceAsStream =
+                Resources.getResourceAsStream("SqlMapConfig.xml");
+        SqlSessionFactory sqlSessionFactory = new
+                SqlSessionFactoryBuilder().build(resourceAsStream);
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        // 获得MyBatis框架生成的UserMapper接口的实现类
+        IUserDao IUserDao = sqlSession.getMapper(IUserDao.class);
+        List<User> userList = IUserDao.findAll();
+        System.out.println(userList);
         sqlSession.close();
     }
 
