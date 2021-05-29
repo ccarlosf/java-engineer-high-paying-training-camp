@@ -24,4 +24,14 @@ public class IUserDaoImpl implements IUserDao {
         sqlSession.close();
         return userList;
     }
+
+    @Override
+    public List<User> findByCondition(User user) {
+        return null;
+    }
+
+    @Override
+    public List<User> findByIds(int[] ids) {
+        return null;
+    }
 }

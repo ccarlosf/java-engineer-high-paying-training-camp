@@ -103,4 +103,41 @@ public class MybatisTest {
         sqlSession.close();
     }
 
+    @Test
+    public void test6() throws IOException {
+        InputStream resourceAsStream = Resources.getResourceAsStream("sqlMapConfig.xml");
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(resourceAsStream);
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        IUserDao mapper = sqlSession.getMapper(IUserDao.class);
+
+        User user1 = new User();
+        user1.setId(1);
+        user1.setUsername("lucy");
+
+        List<User> all = mapper.findByCondition(user1);
+        for (User user : all) {
+            System.out.println(user);
+        }
+
+
+    }
+
+    @Test
+    public void test7() throws IOException {
+        InputStream resourceAsStream = Resources.getResourceAsStream("sqlMapConfig.xml");
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(resourceAsStream);
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        IUserDao mapper = sqlSession.getMapper(IUserDao.class);
+
+        int[] arr = {1, 2};
+
+        List<User> all = mapper.findByIds(arr);
+        for (User user : all) {
+            System.out.println(user);
+        }
+
+    }
+
 }
