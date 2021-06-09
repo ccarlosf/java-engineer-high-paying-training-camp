@@ -16,6 +16,7 @@
         <module>IPersistence</module>
         <module>IPersistence_test</module>
         <module>mybatis_quickStarter</module>
+        <module>mybatis_multitable</module>
     </modules>
 
     <properties>
