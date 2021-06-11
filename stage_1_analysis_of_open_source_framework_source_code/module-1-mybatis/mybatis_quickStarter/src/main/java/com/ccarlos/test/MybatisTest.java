@@ -18,7 +18,7 @@ public class MybatisTest {
 
     @Test
     public void test1() throws IOException {
-        //1.Resources工具类，配置文件的加载，把配置文件加载成字节输入流
+        //1.Resources工具类，配置文件加载，把配置文件加载成字节输入流
         InputStream resourceAsStream = Resources.getResourceAsStream("sqlMapConfig.xml");
         //2.解析了配置文件，并创建了sqlSessionFactory工厂
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(resourceAsStream);
